@@ -1,0 +1,129 @@
+CREATE TABLE T_SESSION (
+ OID VARCHAR2(100) PRIMARY KEY,
+   SESSION_NAME VARCHAR2(100),
+   ACTIVE_STATUS VARCHAR2(1),
+   I_DATE DATE,
+   U_DATE DATE,
+   I_USER VARCHAR2(100),
+   START_YEAR VARCHAR2(100),
+   START_MONTH VARCHAR2(100),
+   END_YEAR VARCHAR2(100),
+   END_MONTH VARCHAR2(100)
+   );
+   
+   CREATE SEQUENCE seq_oid
+  START WITH 1
+  INCREMENT BY 1
+  NOCACHE
+  NOCYCLE;
+
+
+CREATE OR REPLACE PACKAGE PKG_SESSION AS 
+    TYPE t_cursor IS REF CURSOR;
+
+    PROCEDURE insert_T_SESSION (
+       
+        SESSION_NAME IN VARCHAR2,
+        ACTIVE_STATUS IN VARCHAR2,
+       
+        I_USER IN VARCHAR2,
+        START_YEAR IN VARCHAR2,
+        START_MONTH IN VARCHAR2,
+        END_YEAR IN VARCHAR2,
+        END_MONTH IN VARCHAR2
+    );
+    PROCEDURE DELETE_SESSION    ( P_OID	 IN VARCHAR2 ); 
+    PROCEDURE GET_SESSION_BY_USER_ID(p_cursor OUT t_cursor, p_OID VARCHAR2);
+	PROCEDURE GET_SESSION_LIST(p_cursor out t_cursor);
+END PKG_SESSION;
+/
+
+CREATE OR REPLACE PACKAGE BODY PKG_SESSION AS
+    PROCEDURE insert_T_SESSION(
+       
+        SESSION_NAME IN VARCHAR2,
+        ACTIVE_STATUS IN VARCHAR2,
+       
+        I_USER IN VARCHAR2,
+        START_YEAR IN VARCHAR2,
+        START_MONTH IN VARCHAR2,
+        END_YEAR IN VARCHAR2,
+        END_MONTH IN VARCHAR2
+    ) IS
+ 
+	
+	BEGIN 
+       
+	
+        INSERT INTO T_SESSION (
+            OID,
+            SESSION_NAME,
+            ACTIVE_STATUS,
+            I_DATE,
+            U_DATE,
+            I_USER,
+            START_YEAR,
+            START_MONTH,
+            END_YEAR,
+            END_MONTH
+        ) VALUES (
+		    LPAD(seq_oid.NEXTVAL, 5, '0')
+           -- DBMS_RANDOM.STRING('X', 4),
+			--'0000' || LPAD(SEQ_T_SESSION.NEXTVAL, 4, '0')
+			 --GET_OID('OID', 'OID','SESxxxx')    
+            SESSION_NAME,
+            '1',
+           SYSDATE,
+            SYSDATE,
+            I_USER,
+            START_YEAR,
+            START_MONTH,
+            END_YEAR,
+            END_MONTH
+        );
+    END insert_T_SESSION;
+	
+	 PROCEDURE DELETE_SESSION    (P_OID	 IN VARCHAR2 ) AS
+  BEGIN
+   DELETE FROM
+                 T_SESSION
+                 WHERE OID=P_OID;
+                 COMMIT;  
+  END DELETE_SESSION;
+  
+    
+    PROCEDURE GET_SESSION_BY_USER_ID(p_cursor OUT t_cursor, p_OID VARCHAR2) AS
+    BEGIN
+        OPEN p_cursor FOR
+            SELECT * FROM T_SESSION WHERE OID = p_OID;
+    END GET_SESSION_BY_USER_ID;
+	
+	--GET ALL DATA
+	  PROCEDURE GET_SESSION_LIST(p_cursor out t_cursor) AS
+  BEGIN
+   OPEN p_cursor FOR
+                SELECT
+                C.OID OID
+                ,C.*
+                FROM
+                T_SESSION C;
+               
+  END GET_SESSION_LIST;
+	
+END PKG_SESSION;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
