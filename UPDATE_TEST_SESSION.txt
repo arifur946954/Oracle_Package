@@ -1,0 +1,142 @@
+ CREATE SEQUENCE seq_oid
+  START WITH 1
+  INCREMENT BY 1
+  NOCACHE
+  NOCYCLE;
+
+
+CREATE OR REPLACE PACKAGE PKG_TEST_SESSION AS 
+    TYPE t_cursor IS REF CURSOR;
+
+    PROCEDURE insert_T_SESSION (
+       
+        SESSION_NAME IN VARCHAR2,
+        ACTIVE_STATUS IN VARCHAR2,
+       
+        I_USER IN VARCHAR2,
+        START_YEAR IN VARCHAR2,
+        START_MONTH IN VARCHAR2,
+        END_YEAR IN VARCHAR2,
+        END_MONTH IN VARCHAR2
+    );
+	
+	--UPDATE SESSION
+		PROCEDURE UPDATE_SESSION(
+    p_OID IN VARCHAR2,
+    P_SESSION_NAME IN VARCHAR2,
+    P_ACTIVE_STATUS IN VARCHAR2,
+    P_I_USER IN VARCHAR2,
+    P_START_YEAR IN VARCHAR2,
+    P_START_MONTH IN VARCHAR2,
+    P_END_YEAR IN VARCHAR2,
+    P_END_MONTH IN VARCHAR2
+	);
+	
+    PROCEDURE DELETE_SESSION    ( P_OID	 IN VARCHAR2 ); 
+    PROCEDURE GET_SESSION_BY_USER_ID(p_cursor OUT t_cursor, p_OID VARCHAR2);
+	PROCEDURE GET_SESSION_LIST(p_cursor out t_cursor);
+END PKG_TEST_SESSION;
+/
+
+CREATE OR REPLACE PACKAGE BODY PKG_TEST_SESSION AS
+    PROCEDURE insert_T_SESSION(
+       
+        SESSION_NAME IN VARCHAR2,
+        ACTIVE_STATUS IN VARCHAR2,
+       
+        I_USER IN VARCHAR2,
+        START_YEAR IN VARCHAR2,
+        START_MONTH IN VARCHAR2,
+        END_YEAR IN VARCHAR2,
+        END_MONTH IN VARCHAR2
+    ) IS
+ 
+	
+	BEGIN 
+       
+	
+        INSERT INTO TEST_SESSION (
+            OID,
+            SESSION_NAME,
+            ACTIVE_STATUS,
+            I_DATE,
+            U_DATE,
+            I_USER,
+            START_YEAR,
+            START_MONTH,
+            END_YEAR,
+            END_MONTH
+        ) VALUES (
+		    LPAD(seq_oid.NEXTVAL, 5, '0'),
+           -- DBMS_RANDOM.STRING('X', 4),
+			--'0000' || LPAD(SEQ_T_SESSION.NEXTVAL, 4, '0')
+			 --GET_OID('OID', 'OID','SESxxxx')    
+            SESSION_NAME,
+           ACTIVE_STATUS,
+           SYSDATE,
+            SYSDATE,
+            I_USER,
+            START_YEAR,
+            START_MONTH,
+            END_YEAR,
+            END_MONTH
+        );
+    END insert_T_SESSION;
+	
+	--UPDATE SESSION
+	PROCEDURE UPDATE_SESSION(
+     p_OID IN VARCHAR2,
+    P_SESSION_NAME IN VARCHAR2,
+    P_ACTIVE_STATUS IN VARCHAR2,
+    P_I_USER IN VARCHAR2,
+    P_START_YEAR IN VARCHAR2,
+    P_START_MONTH IN VARCHAR2,
+    P_END_YEAR IN VARCHAR2,
+    P_END_MONTH IN VARCHAR2
+	
+	) AS
+	BEGIN
+	UPDATE
+	TEST_SESSION SET
+	
+            SESSION_NAME = P_SESSION_NAME,
+        ACTIVE_STATUS = P_ACTIVE_STATUS,
+        I_DATE = SYSDATE,
+        U_DATE = SYSDATE,
+        I_USER = P_I_USER,
+        START_YEAR = P_START_YEAR,
+        START_MONTH = P_START_MONTH,
+        END_YEAR = P_END_YEAR,
+        END_MONTH = P_END_MONTH
+    WHERE OID = p_OID;
+	COMMIT;
+	END UPDATE_SESSION;
+	
+	
+	 PROCEDURE DELETE_SESSION    (P_OID	 IN VARCHAR2 ) AS
+  BEGIN
+   DELETE FROM
+                 TEST_SESSION
+                 WHERE OID=P_OID;
+                 COMMIT;  
+  END DELETE_SESSION;
+  
+    
+    PROCEDURE GET_SESSION_BY_USER_ID(p_cursor OUT t_cursor, p_OID VARCHAR2) AS
+    BEGIN
+        OPEN p_cursor FOR
+            SELECT * FROM TEST_SESSION WHERE OID = p_OID;
+    END GET_SESSION_BY_USER_ID;
+	
+	--GET ALL DATA
+	  PROCEDURE GET_SESSION_LIST(p_cursor out t_cursor) AS
+  BEGIN
+   OPEN p_cursor FOR
+                SELECT
+               *
+                FROM
+                TEST_SESSION;
+               
+  END GET_SESSION_LIST;
+	
+END PKG_TEST_SESSION;
