@@ -1,0 +1,344 @@
+
+
+
+
+
+CREATE OR REPLACE PACKAGE Employee_Requirement_Pkg AS
+    TYPE t_cursor IS REF CURSOR;
+
+    PROCEDURE Add_Employee(
+        p_MOBILENUMBER IN VARCHAR2,
+         p_NAME IN VARCHAR2,
+          p_FATHERNAME IN VARCHAR2,
+           p_MOTHERNAME IN VARCHAR2,
+           p_NID IN VARCHAR2,
+            p_DATEOFBIRTHD IN VARCHAR2,
+             p_BIRTHPLACE IN VARCHAR2,
+              p_RELIGION IN VARCHAR2,
+               p_BLOODGROUP IN VARCHAR2,
+                p_GENDER IN VARCHAR2,
+                 p_MARITALSTATUS IN VARCHAR2,
+                  p_SPOUSENAME IN VARCHAR2,
+                   p_EMAIL IN VARCHAR2,
+                    p_INTERVIEWDATE IN VARCHAR2,
+                     p_APPLIEDPOST IN VARCHAR2,
+                  p_PROBABLYJOININGDATE IN VARCHAR2,
+                   p_EXPECTEDSELERY IN VARCHAR2,
+                    p_APPLIEDBY IN VARCHAR2
+       
+    );
+
+    PROCEDURE Add_Present_Address(
+        p_DIVISION IN VARCHAR2,
+        p_DISTRICT IN VARCHAR2,
+        p_THANA IN VARCHAR2,
+          p_POSTOFFICE IN VARCHAR2,
+            p_VILLAGE IN VARCHAR2,
+            p_PASSWORD IN VARCHAR2,
+            
+        p_EMPLOYEE_ID IN NUMBER
+    );
+    --for parmanent address
+       PROCEDURE Add_Parmanent_Address(
+         p_DIVISION IN VARCHAR2,
+        p_DISTRICT IN VARCHAR2,
+        p_THANA IN VARCHAR2,
+          p_POSTOFFICE IN VARCHAR2,
+            p_VILLAGE IN VARCHAR2,
+            p_PASSWORD IN VARCHAR2,
+            
+        p_EMPLOYEE_ID IN NUMBER
+    );
+    
+    --for accademic qulification
+        PROCEDURE Add_accademic_qulification(
+        p_DEGREE IN VARCHAR2,
+        p_BOARD IN VARCHAR2,
+        p_INSTUTION IN VARCHAR2,
+          p_MAJOR IN VARCHAR2,
+            p_RESULT IN NUMBER,
+             p_PASSINGYEAR IN NUMBER,
+            
+        p_EMPLOYEE_ID IN NUMBER
+    );
+    --for work experiencr
+    PROCEDURE Add_work_experienc(
+        p_POST IN VARCHAR2,
+        p_ORGANIZATION IN VARCHAR2,
+        p_JOBLOCATION IN VARCHAR2,
+          p_SELERY IN NUMBER,
+            p_REPORTINGTO IN VARCHAR2,
+             p_DEFAULTPRODUCT IN VARCHAR2,
+            
+        p_EMPLOYEE_ID IN NUMBER
+    );
+	
+	 PROCEDURE Delete_Employee(
+        p_employee_id IN NUMBER
+    );
+    
+PROCEDURE Get_Employee_By_ID(
+    p_employee_id IN NUMBER,
+     p_employee_cursor OUT SYS_REFCURSOR,
+    p_PresentAddress_cursor OUT SYS_REFCURSOR,
+     p_ParmanentAddress_cursor OUT SYS_REFCURSOR,
+      p_Accademic_Qulification_cursor OUT SYS_REFCURSOR,
+       p_Work_Experience_cursor OUT SYS_REFCURSOR
+);
+
+ PROCEDURE Get_Employee_All_Employee(
+    p_employee_cursor OUT SYS_REFCURSOR,
+    p_PresentAddress_cursor OUT SYS_REFCURSOR,
+     p_ParmanentAddress_cursor OUT SYS_REFCURSOR,
+      p_Accademic_Qulification_cursor OUT SYS_REFCURSOR,
+       p_Work_Experience_cursor OUT SYS_REFCURSOR
+);
+
+
+
+
+END Employee_Requirement_Pkg;
+/
+
+CREATE OR REPLACE PACKAGE BODY Employee_Requirement_Pkg AS
+
+    PROCEDURE Add_Employee(
+        p_MOBILENUMBER IN VARCHAR2,
+         p_NAME IN VARCHAR2,
+          p_FATHERNAME IN VARCHAR2,
+           p_MOTHERNAME IN VARCHAR2,
+           p_NID IN VARCHAR2,
+            p_DATEOFBIRTHD IN VARCHAR2,
+             p_BIRTHPLACE IN VARCHAR2,
+              p_RELIGION IN VARCHAR2,
+               p_BLOODGROUP IN VARCHAR2,
+                p_GENDER IN VARCHAR2,
+                 p_MARITALSTATUS IN VARCHAR2,
+                  p_SPOUSENAME IN VARCHAR2,
+                   p_EMAIL IN VARCHAR2,
+                    p_INTERVIEWDATE IN VARCHAR2,
+                     p_APPLIEDPOST IN VARCHAR2,
+                  p_PROBABLYJOININGDATE IN VARCHAR2,
+                   p_EXPECTEDSELERY IN VARCHAR2,
+                    p_APPLIEDBY IN VARCHAR2
+    ) IS
+    BEGIN
+        INSERT INTO EMPLOYEE (MOBILENUMBER, NAME, FATHERNAME,MOTHERNAME,NID,DATEOFBIRTHD,BIRTHPLACE,RELIGION,
+        BLOODGROUP,GENDER,MARITALSTATUS,SPOUSENAME,EMAIL,INTERVIEWDATE,APPLIEDPOST,PROBABLYJOININGDATE,EXPECTEDSELERY,APPLIEDBY)
+        
+        VALUES (p_MOBILENUMBER, p_NAME, p_FATHERNAME,p_MOTHERNAME,p_NID,p_DATEOFBIRTHD,p_BIRTHPLACE,p_RELIGION,p_BLOODGROUP,p_GENDER,p_MARITALSTATUS
+        ,p_SPOUSENAME,p_EMAIL,p_INTERVIEWDATE,p_APPLIEDPOST,p_PROBABLYJOININGDATE,p_EXPECTEDSELERY,p_APPLIEDBY);
+    END Add_Employee;
+
+
+--present Addresss
+    PROCEDURE Add_Present_Address(
+         p_DIVISION IN VARCHAR2,
+        p_DISTRICT IN VARCHAR2,
+        p_THANA IN VARCHAR2,
+          p_POSTOFFICE IN VARCHAR2,
+            p_VILLAGE IN VARCHAR2,
+              p_PASSWORD IN VARCHAR2,
+            
+        p_EMPLOYEE_ID IN NUMBER
+    ) IS
+        v_employee_id NUMBER;
+    BEGIN
+        -- Retrieve the employee_id based on certain criteria
+        -- For example, let's assume you want to retrieve the employee ID
+        -- based on the latest record inserted into the EMPLOYEE table.
+        SELECT employee_id INTO v_employee_id
+        FROM EMPLOYEE
+        WHERE ROWNUM = 1
+        ORDER BY employee_id DESC;
+
+        -- Insert into CUSTOMER table using the retrieved employee_id
+        INSERT INTO PRESENTADDRESS (DIVISION, DISTRICT, THANA, POSTOFFICE,VILLAGE,PASSWORD)
+        VALUES (p_DIVISION, p_DISTRICT, p_THANA, p_POSTOFFICE,p_VILLAGE,p_PASSWORD);
+    END Add_Present_Address;
+    
+    
+    --parmanent Addresss
+    PROCEDURE Add_Parmanent_Address(
+         p_DIVISION IN VARCHAR2,
+        p_DISTRICT IN VARCHAR2,
+        p_THANA IN VARCHAR2,
+          p_POSTOFFICE IN VARCHAR2,
+            p_VILLAGE IN VARCHAR2,
+              p_PASSWORD IN VARCHAR2,
+            
+        p_EMPLOYEE_ID IN NUMBER
+    ) IS
+        v_employee_id NUMBER;
+    BEGIN
+        -- Retrieve the employee_id based on certain criteria
+        -- For example, let's assume you want to retrieve the employee ID
+        -- based on the latest record inserted into the EMPLOYEE table.
+        SELECT employee_id INTO v_employee_id
+        FROM EMPLOYEE
+        WHERE ROWNUM = 1
+        ORDER BY employee_id DESC;
+
+        -- Insert into CUSTOMER table using the retrieved employee_id
+        INSERT INTO PARMANENTADDRESS (DIVISION, DISTRICT, THANA, POSTOFFICE,VILLAGE,PASSWORD)
+        VALUES (p_DIVISION, p_DISTRICT, p_THANA, p_POSTOFFICE,p_VILLAGE,p_PASSWORD);
+    END Add_Parmanent_Address;
+    
+    
+    --Add Academic qulification
+     PROCEDURE Add_accademic_qulification(
+        p_DEGREE IN VARCHAR2,
+        p_BOARD IN VARCHAR2,
+        p_INSTUTION IN VARCHAR2,
+          p_MAJOR IN VARCHAR2,
+            p_RESULT IN NUMBER,
+             p_PASSINGYEAR IN NUMBER,
+            
+        p_EMPLOYEE_ID IN NUMBER
+    ) IS
+        v_employee_id NUMBER;
+    BEGIN
+        -- Retrieve the employee_id based on certain criteria
+        -- For example, let's assume you want to retrieve the employee ID
+        -- based on the latest record inserted into the EMPLOYEE table.
+        SELECT employee_id INTO v_employee_id
+        FROM EMPLOYEE
+        WHERE ROWNUM = 1
+        ORDER BY employee_id DESC;
+
+        -- Insert into CUSTOMER table using the retrieved employee_id
+        INSERT INTO ACCADEMICQULIFICATION (DEGREE, BOARD, INSTUTION, MAJOR,RESULT,PASSINGYEAR)
+        VALUES (p_DEGREE, p_BOARD, p_INSTUTION, p_MAJOR,p_RESULT,p_PASSINGYEAR);
+    END Add_accademic_qulification;
+    
+     --Add Work Experience
+     PROCEDURE Add_work_experienc(
+       p_POST IN VARCHAR2,
+        p_ORGANIZATION IN VARCHAR2,
+        p_JOBLOCATION IN VARCHAR2,
+          p_SELERY IN NUMBER,
+            p_REPORTINGTO IN VARCHAR2,
+             p_DEFAULTPRODUCT IN VARCHAR2,
+            
+        p_EMPLOYEE_ID IN NUMBER
+    ) IS
+        v_employee_id NUMBER;
+    BEGIN
+        -- Retrieve the employee_id based on certain criteria
+        -- For example, let's assume you want to retrieve the employee ID
+        -- based on the latest record inserted into the EMPLOYEE table.
+        SELECT employee_id INTO v_employee_id
+        FROM EMPLOYEE
+        WHERE ROWNUM = 1
+        ORDER BY employee_id DESC;
+
+        -- Insert into CUSTOMER table using the retrieved employee_id
+        INSERT INTO EXPERIENCE (POST, ORGANIZATION, JOBLOCATION, SELERY,REPORTINGTO,DEFAULTPRODUCT)
+        VALUES (p_POST, p_ORGANIZATION, p_JOBLOCATION, p_SELERY,p_REPORTINGTO,p_DEFAULTPRODUCT);
+    END Add_work_experienc;
+    
+    
+    
+	
+	 PROCEDURE Delete_Employee(
+        p_employee_id IN NUMBER
+    ) IS
+    BEGIN
+	 -- Delete associated customer records
+        DELETE FROM PRESENTADDRESS WHERE employee_id = p_employee_id;
+        DELETE FROM PARMANENTADDRESS WHERE employee_id = p_employee_id;
+        DELETE FROM ACCADEMICQULIFICATION WHERE employee_id = p_employee_id;
+        DELETE FROM EXPERIENCE WHERE employee_id = p_employee_id;
+	
+        -- Delete the employee record
+        DELETE FROM EMPLOYEE WHERE employee_id = p_employee_id;
+       END Delete_Employee;
+       
+       
+       
+       	--Get employee by id
+	PROCEDURE Get_Employee_By_ID(
+     p_employee_id IN NUMBER,
+     p_employee_cursor OUT SYS_REFCURSOR,
+    p_PresentAddress_cursor OUT SYS_REFCURSOR,
+     p_ParmanentAddress_cursor OUT SYS_REFCURSOR,
+      p_Accademic_Qulification_cursor OUT SYS_REFCURSOR,
+       p_Work_Experience_cursor OUT SYS_REFCURSOR
+)
+IS
+BEGIN
+    -- Open cursor to retrieve employee data
+    OPEN p_Work_Experience_cursor FOR
+    SELECT *
+    FROM EXPERIENCE
+    WHERE employee_id = p_employee_id;
+    
+     OPEN p_Accademic_Qulification_cursor FOR
+    SELECT *
+    FROM ACCADEMICQULIFICATION
+    WHERE employee_id = p_employee_id;
+    
+     OPEN p_ParmanentAddress_cursor FOR
+    SELECT *
+    FROM PARMANENTADDRESS
+    WHERE employee_id = p_employee_id;
+    
+     OPEN p_PresentAddress_cursor FOR
+    SELECT *
+    FROM PRESENTADDRESS
+    WHERE employee_id = p_employee_id;
+
+    -- Open cursor to retrieve customers associated with the employee
+    OPEN p_employee_cursor FOR
+    SELECT *
+    FROM EMPLOYEE
+    WHERE employee_id = p_employee_id;
+END Get_Employee_By_ID;
+
+
+
+--GET ALL EMPLOYEE
+	PROCEDURE Get_Employee_All_Employee(
+     
+     p_employee_cursor OUT SYS_REFCURSOR,
+    p_PresentAddress_cursor OUT SYS_REFCURSOR,
+     p_ParmanentAddress_cursor OUT SYS_REFCURSOR,
+      p_Accademic_Qulification_cursor OUT SYS_REFCURSOR,
+       p_Work_Experience_cursor OUT SYS_REFCURSOR
+)
+IS
+BEGIN
+    -- Open cursor to retrieve employee data
+    OPEN p_Work_Experience_cursor FOR
+    SELECT *
+    FROM EXPERIENCE;
+   
+    
+     OPEN p_Accademic_Qulification_cursor FOR
+    SELECT *
+    FROM ACCADEMICQULIFICATION;
+   
+    
+     OPEN p_ParmanentAddress_cursor FOR
+    SELECT *
+    FROM PARMANENTADDRESS;
+   
+    
+     OPEN p_PresentAddress_cursor FOR
+    SELECT *
+    FROM PRESENTADDRESS;
+    
+
+    -- Open cursor to retrieve customers associated with the employee
+    OPEN p_employee_cursor FOR
+    SELECT *
+    FROM EMPLOYEE;
+   
+END Get_Employee_All_Employee;
+
+
+
+
+
+END Employee_Requirement_Pkg;
+/
