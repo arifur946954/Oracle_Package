@@ -1,0 +1,348 @@
+create or replace NONEDITIONABLE PACKAGE Employee_Requirement_Pkg AS
+    TYPE t_cursor IS REF CURSOR;
+
+    PROCEDURE Add_Employee(
+        p_MOBILENUMBER IN VARCHAR2,
+         p_NAME IN VARCHAR2,
+          p_FATHERNAME IN VARCHAR2,
+           p_MOTHERNAME IN VARCHAR2,
+           p_NID IN VARCHAR2,
+            p_DATEOFBIRTHD IN DATE,
+             p_BIRTHPLACE IN VARCHAR2,
+              p_RELIGION IN VARCHAR2,
+               p_BLOODGROUP IN VARCHAR2,
+                p_GENDER IN VARCHAR2,
+                 p_MARITALSTATUS IN VARCHAR2,
+                  p_SPOUSENAME IN VARCHAR2,
+                   p_EMAIL IN VARCHAR2,
+                    p_INTERVIEWDATE IN DATE,
+                     p_APPLIEDPOST IN VARCHAR2,
+                  p_PROBABLYJOININGDATE IN DATE,
+                   p_EXPECTEDSELERY IN VARCHAR2,
+                    p_APPLIEDBY IN VARCHAR2,
+                     present_DIVISION IN VARCHAR2,
+        present_DISTRICT IN VARCHAR2,
+        present_THANA IN VARCHAR2,
+          present_POSTOFFICE IN VARCHAR2,
+            present_VILLAGE IN VARCHAR2,
+
+
+        parmanent_DIVISION IN VARCHAR2,
+        parmanent_DISTRICT IN VARCHAR2,
+       parmanent_THANA IN VARCHAR2,
+          parmanent_POSTOFFICE IN VARCHAR2,
+            parmanent_VILLAGE IN VARCHAR2,
+     --Accademic Qulification
+           p_DEGREE1 IN VARCHAR2,
+        p_BOARD1 IN VARCHAR2,
+        p_INSTUTION1 IN VARCHAR2,
+          p_MAJOR1 IN VARCHAR2,
+            p_RESULT1 IN NUMBER,
+             p_PASSINGYEAR1 IN NUMBER,
+             
+              p_DEGREE2 IN VARCHAR2,
+        p_BOARD2 IN VARCHAR2,
+        p_INSTUTION2 IN VARCHAR2,
+          p_MAJOR2 IN VARCHAR2,
+            p_RESULT2 IN NUMBER,
+             p_PASSINGYEAR2 IN NUMBER,
+             
+              p_DEGREE3 IN VARCHAR2,
+        p_BOARD3 IN VARCHAR2,
+        p_INSTUTION3 IN VARCHAR2,
+          p_MAJOR3 IN VARCHAR2,
+            p_RESULT3 IN NUMBER,
+             p_PASSINGYEAR3 IN NUMBER,
+             
+              p_DEGREE4 IN VARCHAR2,
+        p_BOARD4 IN VARCHAR2,
+        p_INSTUTION4 IN VARCHAR2,
+          p_MAJOR4 IN VARCHAR2,
+            p_RESULT4 IN NUMBER,
+             p_PASSINGYEAR4 IN NUMBER,
+             
+              p_DEGREE5 IN VARCHAR2,
+        p_BOARD5 IN VARCHAR2,
+        p_INSTUTION5 IN VARCHAR2,
+          p_MAJOR5 IN VARCHAR2,
+            p_RESULT5 IN NUMBER,
+             p_PASSINGYEAR5 IN NUMBER,
+
+             --work experience
+              p_POST1 IN VARCHAR2,
+        p_ORGANIZATION1 IN VARCHAR2,
+        p_JOBLOCATION1 IN VARCHAR2,
+          p_SELERY1 IN NUMBER,
+            p_REPORTINGTO1 IN VARCHAR2,
+             p_DEFAULTPRODUCT1 IN VARCHAR2,
+
+              p_POST2 IN VARCHAR2,
+        p_ORGANIZATION2 IN VARCHAR2,
+        p_JOBLOCATION2 IN VARCHAR2,
+          p_SELERY2 IN NUMBER,
+            p_REPORTINGTO2 IN VARCHAR2,
+             p_DEFAULTPRODUCT2 IN VARCHAR2,
+
+              p_POST3 IN VARCHAR2,
+        p_ORGANIZATION3 IN VARCHAR2,
+        p_JOBLOCATION3 IN VARCHAR2,
+          p_SELERY3 IN NUMBER,
+            p_REPORTINGTO3 IN VARCHAR2,
+             p_DEFAULTPRODUCT3 IN VARCHAR2,
+
+              p_POST4 IN VARCHAR2,
+        p_ORGANIZATION4 IN VARCHAR2,
+        p_JOBLOCATION4 IN VARCHAR2,
+          p_SELERY4 IN NUMBER,
+            p_REPORTINGTO4 IN VARCHAR2,
+             p_DEFAULTPRODUCT4 IN VARCHAR2,
+
+              p_POST5 IN VARCHAR2,
+        p_ORGANIZATION5 IN VARCHAR2,
+        p_JOBLOCATION5 IN VARCHAR2,
+          p_SELERY5 IN NUMBER,
+            p_REPORTINGTO5 IN VARCHAR2,
+             p_DEFAULTPRODUCT5 IN VARCHAR2
+  );
+  
+  PROCEDURE GetEmployeeAllData( p_cursor out t_cursor );
+   PROCEDURE DELETE_Employee   ( P_ID	 IN VARCHAR2 ); 
+     PROCEDURE GetEmployeeByID(  p_cursor out t_cursor,  p_employee_id IN VARCHAR2  );
+
+
+END Employee_Requirement_Pkg;
+/
+create or replace NONEDITIONABLE PACKAGE BODY Employee_Requirement_Pkg AS
+
+    PROCEDURE Add_Employee(
+         p_MOBILENUMBER IN VARCHAR2,
+         p_NAME IN VARCHAR2,
+          p_FATHERNAME IN VARCHAR2,
+           p_MOTHERNAME IN VARCHAR2,
+           p_NID IN VARCHAR2,
+            p_DATEOFBIRTHD IN DATE,
+             p_BIRTHPLACE IN VARCHAR2,
+              p_RELIGION IN VARCHAR2,
+               p_BLOODGROUP IN VARCHAR2,
+                p_GENDER IN VARCHAR2,
+                 p_MARITALSTATUS IN VARCHAR2,
+                  p_SPOUSENAME IN VARCHAR2,
+                   p_EMAIL IN VARCHAR2,
+                    p_INTERVIEWDATE IN DATE,
+                     p_APPLIEDPOST IN VARCHAR2,
+                  p_PROBABLYJOININGDATE IN DATE,
+                   p_EXPECTEDSELERY IN VARCHAR2,
+                    p_APPLIEDBY IN VARCHAR2,
+                     present_DIVISION IN VARCHAR2,
+        present_DISTRICT IN VARCHAR2,
+        present_THANA IN VARCHAR2,
+          present_POSTOFFICE IN VARCHAR2,
+            present_VILLAGE IN VARCHAR2,
+           
+            
+        parmanent_DIVISION IN VARCHAR2,
+        parmanent_DISTRICT IN VARCHAR2,
+       parmanent_THANA IN VARCHAR2,
+          parmanent_POSTOFFICE IN VARCHAR2,
+            parmanent_VILLAGE IN VARCHAR2,
+            
+           
+         --Accademic Qulification
+           p_DEGREE1 IN VARCHAR2,
+        p_BOARD1 IN VARCHAR2,
+        p_INSTUTION1 IN VARCHAR2,
+          p_MAJOR1 IN VARCHAR2,
+            p_RESULT1 IN NUMBER,
+             p_PASSINGYEAR1 IN NUMBER,
+             
+              p_DEGREE2 IN VARCHAR2,
+        p_BOARD2 IN VARCHAR2,
+        p_INSTUTION2 IN VARCHAR2,
+          p_MAJOR2 IN VARCHAR2,
+            p_RESULT2 IN NUMBER,
+             p_PASSINGYEAR2 IN NUMBER,
+             
+              p_DEGREE3 IN VARCHAR2,
+        p_BOARD3 IN VARCHAR2,
+        p_INSTUTION3 IN VARCHAR2,
+          p_MAJOR3 IN VARCHAR2,
+            p_RESULT3 IN NUMBER,
+             p_PASSINGYEAR3 IN NUMBER,
+             
+              p_DEGREE4 IN VARCHAR2,
+        p_BOARD4 IN VARCHAR2,
+        p_INSTUTION4 IN VARCHAR2,
+          p_MAJOR4 IN VARCHAR2,
+            p_RESULT4 IN NUMBER,
+             p_PASSINGYEAR4 IN NUMBER,
+             
+              p_DEGREE5 IN VARCHAR2,
+        p_BOARD5 IN VARCHAR2,
+        p_INSTUTION5 IN VARCHAR2,
+          p_MAJOR5 IN VARCHAR2,
+            p_RESULT5 IN NUMBER,
+             p_PASSINGYEAR5 IN NUMBER,
+             
+               --work experience
+              p_POST1 IN VARCHAR2,
+        p_ORGANIZATION1 IN VARCHAR2,
+        p_JOBLOCATION1 IN VARCHAR2,
+          p_SELERY1 IN NUMBER,
+            p_REPORTINGTO1 IN VARCHAR2,
+             p_DEFAULTPRODUCT1 IN VARCHAR2,
+             
+              p_POST2 IN VARCHAR2,
+        p_ORGANIZATION2 IN VARCHAR2,
+        p_JOBLOCATION2 IN VARCHAR2,
+          p_SELERY2 IN NUMBER,
+            p_REPORTINGTO2 IN VARCHAR2,
+             p_DEFAULTPRODUCT2 IN VARCHAR2,
+             
+              p_POST3 IN VARCHAR2,
+        p_ORGANIZATION3 IN VARCHAR2,
+        p_JOBLOCATION3 IN VARCHAR2,
+          p_SELERY3 IN NUMBER,
+            p_REPORTINGTO3 IN VARCHAR2,
+             p_DEFAULTPRODUCT3 IN VARCHAR2,
+             
+              p_POST4 IN VARCHAR2,
+        p_ORGANIZATION4 IN VARCHAR2,
+        p_JOBLOCATION4 IN VARCHAR2,
+          p_SELERY4 IN NUMBER,
+            p_REPORTINGTO4 IN VARCHAR2,
+             p_DEFAULTPRODUCT4 IN VARCHAR2,
+             
+              p_POST5 IN VARCHAR2,
+        p_ORGANIZATION5 IN VARCHAR2,
+        p_JOBLOCATION5 IN VARCHAR2,
+          p_SELERY5 IN NUMBER,
+            p_REPORTINGTO5 IN VARCHAR2,
+             p_DEFAULTPRODUCT5 IN VARCHAR2
+    ) IS
+      v_Employee_id NUMBER;
+    BEGIN
+      -- Insert data into STUDENT1 table
+
+
+        INSERT INTO EMPLOYEE (MOBILENUMBER, NAME, FATHERNAME,MOTHERNAME,NID,DATEOFBIRTHD,BIRTHPLACE,RELIGION,
+        BLOODGROUP,GENDER,MARITALSTATUS,SPOUSENAME,EMAIL,INTERVIEWDATE,APPLIEDPOST,PROBABLYJOININGDATE,EXPECTEDSELERY,APPLIEDBY)
+
+        VALUES (p_MOBILENUMBER, p_NAME, p_FATHERNAME,p_MOTHERNAME,p_NID,p_DATEOFBIRTHD,p_BIRTHPLACE,p_RELIGION,p_BLOODGROUP,p_GENDER,p_MARITALSTATUS
+        ,p_SPOUSENAME,p_EMAIL,p_INTERVIEWDATE,p_APPLIEDPOST,p_PROBABLYJOININGDATE,p_EXPECTEDSELERY,p_APPLIEDBY)
+         RETURNING employee_id INTO v_Employee_id;
+
+         --present address
+         INSERT INTO PRESENTADDRESS (DIVISION, DISTRICT, THANA, POSTOFFICE,VILLAGE,employee_id)
+        VALUES (present_DIVISION, present_DISTRICT, present_THANA, present_POSTOFFICE,present_VILLAGE,v_Employee_id);
+
+         --parmanent Address
+         INSERT INTO PARMANENTADDRESS (DIVISION, DISTRICT, THANA, POSTOFFICE,VILLAGE,employee_id)
+        VALUES (parmanent_DIVISION, parmanent_DISTRICT, parmanent_THANA, parmanent_POSTOFFICE,parmanent_VILLAGE,v_Employee_id);
+
+        --Accademic Qulification
+         INSERT INTO ACCADEMICQULIFICATION (DEGREE, BOARD, INSTUTION, MAJOR,RESULT,PASSINGYEAR,employee_id)
+        VALUES (p_DEGREE1, p_BOARD1, p_INSTUTION1, p_MAJOR1,p_RESULT1,p_PASSINGYEAR1,v_Employee_id);
+
+        INSERT INTO ACCADEMICQULIFICATION (DEGREE, BOARD, INSTUTION, MAJOR,RESULT,PASSINGYEAR,employee_id)
+        VALUES (p_DEGREE2, p_BOARD2, p_INSTUTION2, p_MAJOR2,p_RESULT2,p_PASSINGYEAR2,v_Employee_id);
+
+        INSERT INTO ACCADEMICQULIFICATION (DEGREE, BOARD, INSTUTION, MAJOR,RESULT,PASSINGYEAR,employee_id)
+        VALUES (p_DEGREE3, p_BOARD3, p_INSTUTION3, p_MAJOR3,p_RESULT3,p_PASSINGYEAR3,v_Employee_id);
+
+        INSERT INTO ACCADEMICQULIFICATION (DEGREE, BOARD, INSTUTION, MAJOR,RESULT,PASSINGYEAR,employee_id)
+        VALUES (p_DEGREE4, p_BOARD4, p_INSTUTION4, p_MAJOR4,p_RESULT4,p_PASSINGYEAR4,v_Employee_id);
+
+        INSERT INTO ACCADEMICQULIFICATION (DEGREE, BOARD, INSTUTION, MAJOR,RESULT,PASSINGYEAR,employee_id)
+        VALUES (p_DEGREE5, p_BOARD5, p_INSTUTION5, p_MAJOR5,p_RESULT5,p_PASSINGYEAR5,v_Employee_id);
+
+        --work experience
+
+
+          INSERT INTO EXPERIENCE (POST, ORGANIZATION, JOBLOCATION, SELERY,REPORTINGTO,DEFAULTPRODUCT,employee_id)
+        VALUES (p_POST1, p_ORGANIZATION1, p_JOBLOCATION1, p_SELERY1,p_REPORTINGTO1,p_DEFAULTPRODUCT1,v_Employee_id);
+
+        INSERT INTO EXPERIENCE (POST, ORGANIZATION, JOBLOCATION, SELERY,REPORTINGTO,DEFAULTPRODUCT,employee_id)
+        VALUES (p_POST2, p_ORGANIZATION2, p_JOBLOCATION2, p_SELERY2,p_REPORTINGTO2,p_DEFAULTPRODUCT2,v_Employee_id);
+
+        INSERT INTO EXPERIENCE (POST, ORGANIZATION, JOBLOCATION, SELERY,REPORTINGTO,DEFAULTPRODUCT,employee_id)
+        VALUES (p_POST3, p_ORGANIZATION3, p_JOBLOCATION3, p_SELERY3,p_REPORTINGTO3,p_DEFAULTPRODUCT3,v_Employee_id);
+
+        INSERT INTO EXPERIENCE (POST, ORGANIZATION, JOBLOCATION, SELERY,REPORTINGTO,DEFAULTPRODUCT,employee_id)
+        VALUES (p_POST4, p_ORGANIZATION4, p_JOBLOCATION4, p_SELERY4,p_REPORTINGTO4,p_DEFAULTPRODUCT4,v_Employee_id);
+
+        INSERT INTO EXPERIENCE (POST, ORGANIZATION, JOBLOCATION, SELERY,REPORTINGTO,DEFAULTPRODUCT,employee_id)
+        VALUES (p_POST5, p_ORGANIZATION5, p_JOBLOCATION5, p_SELERY5,p_REPORTINGTO5,p_DEFAULTPRODUCT5,v_Employee_id);
+
+
+    END Add_Employee;
+
+--get Employee All Data
+PROCEDURE GetEmployeeAllData(
+   
+    p_cursor out t_cursor
+    
+)
+IS
+BEGIN
+ OPEN p_cursor FOR
+       -- SELECT e1.employee_id, e1.MOBILENUMBER, e1.NAME, e1.FATHERNAME,e1.MOTHERNAME,e1.NID,e1.DATEOFBIRTHD,e1.BIRTHPLACE,e1.RELIGION,
+       -- e1.BLOODGROUP,e1.GENDER,e1.MARITALSTATUS,e1.SPOUSENAME,e1.EMAIL,e1.INTERVIEWDATE,e1.APPLIEDPOST,e1.PROBABLYJOININGDATE,
+       -- e1.EXPECTEDSELERY,e1.APPLIEDBY,
+        
+        --pr.PRESENT_ADD_ID,pr.DIVISION, pr.DISTRICT, pr.THANA, pr.POSTOFFICE,pr.VILLAGE,pr.employee_id,
+       --pa.PARMANENT_ADD_ID, pa.DIVISION, pa.DISTRICT, pa.THANA, pa.POSTOFFICE,pa.VILLAGE,pa.employee_id,
+      --ac.ACC_QLF_ID, ac.DEGREE, ac.BOARD, ac.INSTUTION, ac.MAJOR,ac.RESULT,ac.PASSINGYEAR,ac.employee_id,
+     --ex.EXP_ID, ex.POST, ex.ORGANIZATION, ex.JOBLOCATION, ex.SELERY,ex.REPORTINGTO,ex.DEFAULTPRODUCT,ex.employee_id
+     
+      
+       
+        --FROM employee e1
+        --LEFT JOIN presentaddress pr ON e1.employee_id = pr.employee_id
+        --LEFT JOIN parmanentaddress pa  ON e1.employee_id = pa.employee_id 
+         --LEFT JOIN accademicqulification ac  ON e1.employee_id = ac.employee_id
+       --LEFT JOIN experience ex  ON e1.employee_id = ex.employee_id;
+        
+ SELECT e1.*, pr.*, pa.*, ac.*, ex.*
+FROM employee e1
+LEFT JOIN presentaddress pr ON e1.employee_id = pr.employee_id
+LEFT JOIN parmanentaddress pa ON e1.employee_id = pa.employee_id
+LEFT JOIN accademicqulification ac ON e1.employee_id = ac.employee_id
+LEFT JOIN experience ex ON e1.employee_id = ex.employee_id;
+
+           
+   
+END GetEmployeeAllData;
+
+--Delete Employee
+
+		 PROCEDURE DELETE_Employee(
+       P_ID IN VARCHAR2
+    ) IS
+    BEGIN
+	  -- Delete the employee record
+        DELETE FROM presentaddress WHERE employee_id = P_ID;
+          DELETE FROM parmanentaddress WHERE employee_id = P_ID;
+            DELETE FROM accademicqulification WHERE employee_id = P_ID;
+              DELETE FROM experience WHERE employee_id = P_ID;
+	 -- Delete associated customer records
+        DELETE FROM employee WHERE employee_id = P_ID;
+       END DELETE_Employee;
+       
+       --get EmployeeByID
+        PROCEDURE GetEmployeeByID(p_cursor out t_cursor,  p_employee_id IN VARCHAR2  )
+      
+    IS
+    BEGIN
+        OPEN p_cursor FOR
+       SELECT e1.*, pr.*, pa.*, ac.*, ex.*
+FROM employee e1
+LEFT JOIN presentaddress pr ON e1.employee_id = pr.employee_id
+LEFT JOIN parmanentaddress pa ON e1.employee_id = pa.employee_id
+LEFT JOIN accademicqulification ac ON e1.employee_id = ac.employee_id
+LEFT JOIN experience ex ON e1.employee_id = ex.employee_id
+        WHERE e1.employee_id = p_employee_id;
+    END GetEmployeeByID;
+    
+
+
+END Employee_Requirement_Pkg;
