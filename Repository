@@ -1,0 +1,195 @@
+using Oracle.ManagedDataAccess.Client;
+using RequirementForm.Common;
+using RequirementForm.Models;
+using System;
+using System.Data;
+using System.Dynamic;
+using System.Security.Cryptography;
+
+namespace RequirementForm.Repository
+{
+    public class StudentRepository
+    {
+        private string _connectionString = "Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=xe)));User ID=system;Password=ArifDB1234;Persist Security Info=True";
+        public void AddStudent(Student1 student)
+        {
+
+            OracleConnection con = new OracleConnection(_connectionString);
+
+            try
+            {
+                using (OracleCommand objCmd = new OracleCommand())
+                {
+                    using (objCmd.Connection = con)
+                    {
+                        objCmd.CommandType = CommandType.StoredProcedure;
+                        objCmd.CommandText = "system.StudentPackages.SaveStudentData";
+
+                        objCmd.Parameters.Add("p_Name", OracleDbType.Varchar2, 50).Value = student.Name;
+                        objCmd.Parameters.Add("p_Age", OracleDbType.Varchar2, 50).Value = student.Age;
+
+                        for (int i = 1; i <= student.student2.Count; i++)
+                        {
+                            objCmd.Parameters.Add("p_Student2_Address" + i, OracleDbType.Varchar2, 50).Value = student.student2[i - 1].Address;
+                            objCmd.Parameters.Add("p_Student2_Grade" + i, OracleDbType.Varchar2, 50).Value = student.student2[i - 1].Grade;
+
+
+                        }
+                        for (int j = student.student2.Count + 1; j <= 3; j++)
+                        {
+                            objCmd.Parameters.Add("p_Student2_Address" + j, OracleDbType.Varchar2, 50).Value = "Null";
+                            objCmd.Parameters.Add("p_Student2_Grade" + j, OracleDbType.Varchar2, 50).Value = "Null";
+
+
+                        }
+
+
+                        objCmd.Connection.Open();
+                        objCmd.ExecuteNonQuery();
+                        objCmd.Connection.Close();
+
+                    }
+                }
+            }
+            catch (OracleException exception)
+            {
+                Console.WriteLine(exception.Message);
+
+            }
+
+        }
+
+
+        //get all data not binding
+
+        public List<dynamic> GetStudentList()
+        {
+            OracleCommand objCmd = new OracleCommand();
+            objCmd.CommandText = "system.StudentPackages.GetStudentAllData";
+            objCmd.CommandType = CommandType.StoredProcedure;
+
+            objCmd.Parameters.Add("p_cursor", OracleDbType.RefCursor).Direction = ParameterDirection.Output;
+            ConvertDataTableToGeniric classDt = new ConvertDataTableToGeniric();
+      
+            DataTable dt = classDt.GetData(objCmd);
+
+            List<dynamic> list = new List<dynamic>();
+            foreach (DataRow row in dt.Rows)
+            {
+                dynamic item = new ExpandoObject();
+                foreach (DataColumn col in dt.Columns)
+                {
+                    ((IDictionary<string, object>)item)[col.ColumnName] = row[col];
+                }
+                list.Add(item);
+            }
+            return list;
+        }
+
+
+        public List<Student1> GetStudentList2()
+        {
+            OracleCommand objCmd = new OracleCommand();
+            objCmd.CommandText = "system.StudentPackages.GetStudentAllData";
+            objCmd.CommandType = CommandType.StoredProcedure;
+
+            objCmd.Parameters.Add("p_cursor", OracleDbType.RefCursor).Direction = ParameterDirection.Output;
+            ConvertDataTableToGeniric classDt = new ConvertDataTableToGeniric();
+
+            DataTable dt = classDt.GetData(objCmd);
+
+            List<Student1> list = new List<Student1>();
+            foreach (DataRow row in dt.Rows)
+            {
+                Student1 student = new Student1
+                {
+                    Student1_id = Convert.ToInt32(row["Student1_id"]),
+                    Name = row["Name"].ToString(),
+                    Age = Convert.ToInt32(row["Age"]),
+                    student2 = new List<Student2>()
+                };
+
+                Student2 student2 = new Student2
+                {
+                    Student2_id = Convert.ToInt32(row["Student2_id"]),
+                    Address = row["Address"].ToString(),
+                    Grade = row["Grade"].ToString(),
+                    Student1_id = Convert.ToInt32(row["Student1_id"])
+                };
+
+                student.student2.Add(student2);
+
+                // Check if the student is already in the list
+                Student1 existingStudent = list.FirstOrDefault(s => s.Student1_id == student.Student1_id);
+                if (existingStudent != null)
+                {
+                    // Merge student2 into the existing student
+                    existingStudent.student2.Add(student2);
+                }
+                else
+                {
+                    // Add the student to the list if not already present
+                    list.Add(student);
+                }
+            }
+            return list;
+        }
+
+
+
+        public List<Student1> GetStudentListByID(int ID)
+        {
+            OracleCommand objCmd = new OracleCommand();
+            objCmd.CommandText = "system.StudentPackages.GetStudentDataByID";
+            objCmd.CommandType = CommandType.StoredProcedure;
+           
+            objCmd.Parameters.Add("p_cursor", OracleDbType.RefCursor).Direction = ParameterDirection.Output;
+            objCmd.Parameters.Add("p_Student1_id", OracleDbType.Varchar2).Value = ID;
+
+            ConvertDataTableToGeniric classDt = new ConvertDataTableToGeniric();
+
+            DataTable dt = classDt.GetData(objCmd);
+
+            List<Student1> list = new List<Student1>();
+            foreach (DataRow row in dt.Rows)
+            {
+                Student1 student = new Student1
+                {
+                    Student1_id = Convert.ToInt32(row["Student1_id"]),
+                    Name = row["Name"].ToString(),
+                    Age = Convert.ToInt32(row["Age"]),
+                    student2 = new List<Student2>()
+                };
+
+                Student2 student2 = new Student2
+                {
+                    Student2_id = Convert.ToInt32(row["Student2_id"]),
+                    Address = row["Address"].ToString(),
+                    Grade = row["Grade"].ToString(),
+                    Student1_id = Convert.ToInt32(row["Student1_id"])
+                };
+
+                student.student2.Add(student2);
+
+                // Check if the student is already in the list
+                Student1 existingStudent = list.FirstOrDefault(s => s.Student1_id == student.Student1_id);
+                if (existingStudent != null)
+                {
+                    // Merge student2 into the existing student
+                    existingStudent.student2.Add(student2);
+                }
+                else
+                {
+                    // Add the student to the list if not already present
+                    list.Add(student);
+                }
+            }
+            return list;
+        }
+
+
+
+
+
+    }
+}
